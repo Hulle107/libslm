@@ -1,0 +1,20 @@
+{
+  "name": "libslm",
+  "version": "1.0.0",
+  "description": "A chaotic collection of experiments.",
+  "license": "MIT",
+  "author": "Delta Thiesen <delta.thiesen.1990@gmail.com>",
+  "scripts": {
+    "build": "run-p build:**",
+    "build:binary": "npm run build --workspace=binary --if-present",
+    "build:guard": "npm run build --workspace=guard --if-present"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "npm-run-all2": "^7.0.2"
+  },
+  "workspaces": [
+    "binary",
+    "guard"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "libslm-binary",
+  "version": "1.0.0",
+  "description": "A set of low-level classes designed for working with binary data, numeric representations.",
+  "license": "MIT",
+  "author": "Delta Thiesen <delta.thiesen.1990@gmail.com>",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

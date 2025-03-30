@@ -1,0 +1,14 @@
+{
+  "name": "libslm-guard",
+  "version": "1.0.0",
+  "description": "",
+  "license": "MIT",
+  "author": "Delta Thiesen <delta.thiesen.1990@gmail.com>",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}
