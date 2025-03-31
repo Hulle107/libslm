@@ -1,7 +1,8 @@
 {
   "name": "libslm",
   "version": "1.0.0",
-  "description": "A chaotic collection of experiments.",
+  "homepage": "https://github.com/Hulle107/libslm#readme",
+  "description": "Libslm (Life is boring so let's make): A chaotic collection of experiments.",
   "license": "MIT",
   "author": "Delta Thiesen <delta.thiesen.1990@gmail.com>",
   "scripts": {
@@ -15,6 +16,14 @@
   },
   "workspaces": [
     "binary",
-    "guard"
-  ]
+    "guard",
+    "vm"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hulle107/libslm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hulle107/libslm/issues"
+  }
 }
