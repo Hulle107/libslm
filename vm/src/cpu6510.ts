@@ -76,119 +76,29 @@ import { TXA } from "./operations/TXA";
 import { TXS } from "./operations/TXS";
 import { TYA } from "./operations/TYA";
 
-//**************************************
-//* CENTRAL PROCESSING UNIT (CPU) 6510 *
-//**************************************
-
-// Source: http://www.unusedino.de/ec64/technical/aay/c64/
-// Source: https://codebase64.org/lib/exe/fetch.php?media=base:nomoresecrets-nmos6510unintendedopcodes-20212412.pdf
-// Source: https://ist.uwaterloo.ca/~schepers/MJK/6510.html
-// Source: https://www.oxyron.de/html/opcodes02.html
-// Source: https://github.com/davepoo/6502Emulator/tree/master
-// Source: https://web.archive.org/web/20221106105459if_/http://archive.6502.org/books/mcs6500_family_hardware_manual.pdf
-
-/**
- * Used to get given flag in **Processor Status**
- */
 export enum statusFlag {
-    /**
-     * ## Negative flag
-     */
     n = 0,
-    /**
-     * ## Overflow flag
-     */
     v = 1,
-    /**
-     * ## Break flag
-     */
     b = 3,
-    /**
-     * ## Decimal Mode flag
-     */
     d = 4,
-    /**
-     * ## Interrupt Disabled flag
-     */
     i = 5,
-    /**
-     * ## Zero flag
-     */
     z = 6,
-    /**
-     * ## Carry flag
-     */
     c = 7,
 }
 
 export class cpu6510 {
-    //--------------------------------------------------
-    // Properties
-    //--------------------------------------------------
-
-    /**
-     * ## Program Counter
-     * @private
-     */
     protected pc: word = word.zero;
-    /**
-     * ## Stack Pointer
-     * @private
-     */
     protected sp: byte = byte.zero;
-    /**
-     * ## Processor Status
-     * @private
-     */
     protected ps: byte = byte.zero;
-    /**
-     * ## Accumulator
-     * @private
-     */
     protected  a: byte = byte.zero;
-    /**
-     * ## Index Register X
-     * @private
-     */
     protected  x: byte = byte.zero;
-    /**
-     * ## Index Register Y
-     * @private
-     */
     protected  y: byte = byte.zero;
-    /**
-     * How many **Clock cycles** to wait.
-     * @description This simulate the time the processor takes to perform a task.
-     * @private
-     */
     protected wait: number = 0;
 
-    //--------------------------------------------------
-    // Getters & Setters
-    //--------------------------------------------------
-    /**
-     * A boolean to check if the processor is in a working state.
-     * @readonly
-     */
     get working(): boolean { return this.wait > 0 }
 
-    /**
-     * Returns the current **Stack address**.
-     * @readonly
-     * @private
-     */
     protected get stackAddress(): word { return new word(0x0100 | +this.sp) }
-    /**
-     * Returns the current **Zero Page address**.
-     * @readonly
-     * @private
-     */
     protected get zeroPageAddress(): word { return new word(+this.fetchMemory()) }
-    /**
-     * Returns the current **Zero Page address** with **Index Register X** added.
-     * @readonly
-     * @private
-     */
     protected get zeroPageXAddress(): word { 
         let address: number = +this.zeroPageAddress;
         
@@ -197,11 +107,6 @@ export class cpu6510 {
 
         return new word(address);
     }
-    /**
-     * Returns the current **Zero Page address** with **Index Register Y** added.
-     * @readonly
-     * @private
-     */
     protected get zeroPageYAddress(): word {
         let address: number = +this.zeroPageAddress;
 
@@ -210,22 +115,12 @@ export class cpu6510 {
 
         return new word(address);
     }
-    /**
-     * Returns the current **Absolute address**.
-     * @readonly
-     * @private
-     */
     protected get absoluteAddress(): word {
         let low: number = +this.fetchMemory();
         let high: number = +this.fetchMemory();
 
         return new word(low + (high << 8));
     }
-    /**
-     * Returns the current **Absolute address** with **Index Register X** added.
-     * @readonly
-     * @private
-     */
     protected get absoluteXAddress(): word {
         let address: number = +this.absoluteAddress;
         let addressX: number = address + (+this.x);
@@ -234,11 +129,6 @@ export class cpu6510 {
 
         return new word(addressX);
     }
-    /**
-     * Returns the current **Absolute address** with **Index Register Y** added.
-     * @readonly
-     * @private
-     */
     protected get absoluteYAddress(): word {
         let address: number = +this.absoluteAddress;
         let addressY: number = address + (+this.y);
@@ -247,11 +137,6 @@ export class cpu6510 {
 
         return new word(addressY);
     }
-    /**
-     * Returns the current **Indirect address** with **Index Register X** added.
-     * @readonly
-     * @private
-     */
     protected get indirectXAddress(): word {
         let zeroPageAddress: number = +this.fetchMemory();
         
@@ -263,11 +148,6 @@ export class cpu6510 {
 
         return new word(low + (high << 8));
     }
-    /**
-     * Returns the current **Indirect address** with **Index Register Y** added to the result.
-     * @readonly
-     * @private
-     */
     protected get indirectYAddress(): word {
         let zeroPageAddress: number = +this.fetchMemory();
         let low: number = +this.readMemory(new word(zeroPageAddress));
@@ -280,18 +160,8 @@ export class cpu6510 {
         return new word(addressY);
     }
 
-    //--------------------------------------------------
-    // Contructor
-    //--------------------------------------------------
     constructor() {}
 
-    //--------------------------------------------------
-    // Main Logic
-    //--------------------------------------------------
-    /**
-     * Called every **Clock cycles**.
-     * @description This work like an update function, to update the processor.
-     */
     clock(): void {
         if (this.working) {
             this.wait--;
@@ -302,9 +172,6 @@ export class cpu6510 {
         this.operationTable[operationIndex].apply(this);
     }
 
-    /**
-     * Reset the processor to an known state.
-     */
     reset(): void {
         this.pc.value = 0xFFFC; // 0b1111111111111100
         this.sp.value = 0xFF;   // 0b11111111
@@ -314,9 +181,6 @@ export class cpu6510 {
         this.y.value = 0;
     }
 
-    //--------------------------------------------------
-    // Memory Logic
-    //--------------------------------------------------
     protected readMemory(address: word): byte {
         let data: byte = machine.pla.readByte(address);
 
@@ -338,9 +202,6 @@ export class cpu6510 {
         return data;
     }
 
-    //--------------------------------------------------
-    // Stack Logic
-    //--------------------------------------------------
     protected popStack(): byte {
         this.sp.value++;
         this.wait++;
@@ -354,19 +215,11 @@ export class cpu6510 {
         this.wait++;
     }
 
-    //--------------------------------------------------
-    // Helper Logic
-    //--------------------------------------------------
     protected setZeroAndNegativeFlags(register: byte): void {
         this.ps[statusFlag.z] = +register == 0? 1 : 0;
         this.ps[statusFlag.n] = +register == 0x80 ? 1 : 0;
     }
 
-    /**
-     * ## Operation table
-     * @readonly
-     * @private
-     */
     protected readonly operationTable: Record<number, (this: cpu6510) => void> = {
         0x00: BRK,  0x01: ORA_ZDX,0x02: JAM,  0x03: SLO_ZDX,0x04: NOP_Z, 0x05: ORA_Z, 0x06: ASL_Z, 0x07: SLO_Z,
         0x10: BPL_R,0x11: ORA_ZDY,0x12: JAM,  0x13: SLO_ZDY,0x14: NOP_ZX,0x15: ORA_ZX,0x16: ASL_ZX,0x17: SLO_ZX,
