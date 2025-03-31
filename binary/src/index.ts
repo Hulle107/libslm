@@ -32,6 +32,81 @@ export class bit {
     toString(): string { return '(' + this.valueOf() + ')' }
 }
 
+export class nibble {
+    readonly [Symbol.isConcatSpreadable]: boolean = true;
+    readonly length: number = 4;
+    readonly mask: number = 15;
+
+    protected tuble = [false, false, false, false];
+
+    get 0(): 0 | 1 { return this.tuble[3]? 1 : 0; }
+    get 1(): 0 | 1 { return this.tuble[2]? 1 : 0; }
+    get 2(): 0 | 1 { return this.tuble[1]? 1 : 0; }
+    get 3(): 0 | 1 { return this.tuble[0]? 1 : 0; }
+
+    set 0(value: 0 | 1) { this.tuble[3] = value? true: false; }
+    set 1(value: 0 | 1) { this.tuble[2] = value? true: false; }
+    set 2(value: 0 | 1) { this.tuble[1] = value? true: false; }
+    set 3(value: 0 | 1) { this.tuble[0] = value? true: false; }
+
+    get value(): number { return this.valueOf(); }
+    set value(value: number) {
+        let next: number = value;
+
+        while(true) {
+            if (next > this.mask) next = next >> this.length;
+            if (next < 0) next = this.mask - Math.abs(next);
+            if (next >= 0 && next <= this.mask) break;
+        }
+
+        for (
+            let index = this.length - 1, mask = 1;
+            index >= 0;
+            this.tuble[index] = next & mask? true: false, mask <<= 1, index--
+        );
+    }
+
+    static get zero(): nibble { return new nibble(0); }
+
+    constructor(value: number) {
+        for (
+            let index = this.length - 1, mask = 1;
+            index >= 0;
+            this.tuble[index] = value & mask? true: false, mask <<= 1, index--
+        );
+    }
+
+    [Symbol.toPrimitive](hint: primitive) {
+        if (hint === 'number') return this.valueOf();
+        if (hint === 'string') return this.toString();
+        return null;
+    }
+
+    valueOf(): number {
+        let number: number = 0;
+
+        for (
+            let index = this.length - 1, mask = 1;
+            index >= 0;
+            number += this.tuble[index]? mask : 0, mask <<= 1, index--
+        );
+
+        return number;
+    }
+    toString(): string {
+        let string: string = '';
+
+        for (let index = 0; index < this.length; index++) {
+            let value: number = this.tuble[index]? 1 : 0;
+
+            if (index > 0) string += ',';
+            string += value;
+        }
+
+        return '(' + string + ')';
+    }
+}
+
 export class byte {
     readonly [Symbol.isConcatSpreadable]: boolean = true;
     readonly length: number = 8;
@@ -214,7 +289,7 @@ export class word {
     }
 }
 
-export class int {
+export class dword {
     readonly [Symbol.isConcatSpreadable]: boolean = true;
     readonly length: number = 16;
     readonly mask: number = 4294967295;
@@ -304,7 +379,7 @@ export class int {
         );
     }
 
-    static get zero(): int { return new int(0); }
+    static get zero(): dword { return new dword(0); }
 
     constructor(value: number) {
         for (
@@ -345,7 +420,7 @@ export class int {
     }
 }
 
-type valueType = number | bit | byte | word | int;
+type valueType = number | bit | nibble | byte | word | dword;
 
 export function stringify(value: valueType, prefix: boolean = false): string {
     let number: number = +value;
