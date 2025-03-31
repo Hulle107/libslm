@@ -11,6 +11,7 @@ Life is boring so lets make
   - [Binary](#binary)
     - [Features](#features)
     - [Primitive Types](#primitive-types)
+    - [Utility Methods](#utility-methods)
     - [Usage Example](#usage-example)
     - [Notes](#notes)
   - [Guard](#guard)
@@ -40,9 +41,13 @@ This library provides a set of primitive type classes for working with binary da
 - **word**: A 16-bit unsigned integer.
 - **dword**: A 32-bit unsigned integer.
 
+### Utility Methods
+- `stringify(value)`
+- `hexify(value)`
+
 ### Usage Example
 ```typescript
-import {byte} from 'libslm-binary';
+import {byte, stringify, hexify} from 'libslm-binary';
 
 let first = new byte(65);
 console.info(first.toString());   // (0,1,0,0,0,0,0,1)
@@ -58,9 +63,9 @@ second.value -= 5;
 
 let third = +second;
 
-console.info('first: ', stringify(first, true));  // 0b01000001
-console.info('second: ', hexify(second, true));   // 0xFF
-console.info('third: ', third);                   // 255
+console.info(stringify(first, true)); // 0b01000001
+console.info(hexify(second, true));   // 0xFF
+console.info(third);                  // 255
 ```
 
 ### Notes
