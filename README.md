@@ -1,11 +1,10 @@
-# Libslm
-Life is boring so lets make
+# Libslm (Life is boring so let's make)
 
 ![Version](https://img.shields.io/github/package-json/v/Hulle107/libslm?style=for-the-badge)
 ![License](https://img.shields.io/github/license/Hulle107/libslm?style=for-the-badge)
 
 ## Indexing
-- [Libslm](#libslm)
+- [Libslm (Life is boring so let's make)](#libslm-life-is-boring-so-lets-make)
   - [Indexing](#indexing)
   - [Introduction](#introduction)
   - [Binary](#binary)
