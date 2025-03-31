@@ -1,6 +1,7 @@
 {
   "name": "libslm-guard",
   "version": "1.0.0",
+  "homepage": "https://github.com/Hulle107/libslm#readme",
   "description": "",
   "license": "MIT",
   "author": "Delta Thiesen <delta.thiesen.1990@gmail.com>",
@@ -10,5 +11,12 @@
   },
   "devDependencies": {
     "typescript": "^5.8.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hulle107/libslm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Hulle107/libslm/issues"
   }
 }
