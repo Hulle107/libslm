@@ -42,8 +42,8 @@ This library provides a set of primitive type classes for working with binary da
 - **dword**: A 32-bit unsigned integer.
 
 ### Utility Methods
-- `stringify(value)`
-- `hexify(value)`
+- `stringify(value, prefix?)`
+- `hexify(value, prefix?)`
 
 ### Usage Example
 ```typescript
