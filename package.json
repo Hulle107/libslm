@@ -8,7 +8,8 @@
   "scripts": {
     "build": "run-p build:**",
     "build:binary": "npm run build --workspace=binary --if-present",
-    "build:guard": "npm run build --workspace=guard --if-present"
+    "build:guard": "npm run build --workspace=guard --if-present",
+    "build:vm": "npm run build --workspace=vm --if-present"
   },
   "dependencies": {
     "cross-env": "^7.0.3",

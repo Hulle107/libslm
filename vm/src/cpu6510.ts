@@ -1,5 +1,5 @@
-import { byte, word } from "../../binary/dist";
-import { machine } from "./machine";
+import { byte, word } from "libslm-binary";
+import { machine } from ".";
 import { ADC_A, ADC_AX, ADC_AY, ADC_I, ADC_Z, ADC_ZDX, ADC_ZDY, ADC_ZX } from "./operations/ADC";
 import { ANC_I } from "./operations/ANC";
 import { AND_A, AND_AX, AND_AY, AND_I, AND_Z, AND_ZDX, AND_ZDY, AND_ZX } from "./operations/AND";

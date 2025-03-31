@@ -1,4 +1,4 @@
-import { byte, word } from "../../binary";
+import { byte, word } from "libslm-binary";
 
 export class programmableLogicArray {
     clock() {}
