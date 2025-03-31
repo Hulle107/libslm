@@ -9,16 +9,17 @@ Life is boring so lets make
   - [Indexing](#indexing)
   - [Introduction](#introduction)
   - [Binary](#binary)
-    - [Types](#types)
-    - [Eksamples](#eksamples)
+    - [Features](#features)
+    - [Primitive Types](#primitive-types)
+    - [Usage Example](#usage-example)
+    - [Notes](#notes)
   - [Guard](#guard)
-    - [Types](#types-1)
-      - [Against](#against)
-      - [Is](#is)
-    - [Eksamples](#eksamples-1)
+    - [Features](#features-1)
+    - [Available Guard Methods](#available-guard-methods)
+    - [Usage Example](#usage-example-1)
+    - [Notes](#notes-1)
 
 ## Introduction
-
 Welcome to this library—a chaotic collection of experiments, half-baked ideas, and random bursts of inspiration. This is not a polished, production-ready framework but rather a playground for concepts that may or may not evolve into something useful.
 
 Because of its experimental nature, stability is not guaranteed. Features may change, disappear, or break without warning. If you're looking for a dependable tool, you might want to look elsewhere. But if you're here for curiosity, exploration, or sheer madness, welcome aboard!
@@ -26,26 +27,28 @@ Because of its experimental nature, stability is not guaranteed. Features may ch
 Use at your own risk, and enjoy the ride.
 
 ## Binary
+This library provides a set of primitive type classes for working with binary data at a low level. These classes are designed to represent fundamental binary structures, allowing for precise manipulation of bits and bytes.
 
-This library includes a set of low-level classes designed for working with binary data, numeric representations, and encoding transformations. These classes provide a flexible way to manipulate bits, bytes, and more. However, due to the experimental nature of this project, implementations may change over time.
+### Features
+- **Encapsulation of Binary Data**: Represent numbers as fixed-width bit sequences.
+- **Basic Arithmetic & Bitwise Operations**: Perform operations while maintaining binary integrity.
 
-### Types
+### Primitive Types
+- **bit**: A single binary digit (0 or 1).
+- **nibble**: A 4-bit unsigned integer.
+- **byte**: An 8-bit unsigned integer.
+- **word**: A 16-bit unsigned integer.
+- **dword**: A 32-bit unsigned integer.
 
-| name | type | length | range |
-|:-----|:-----|:------:|:------|
-| bit | class | 1 | 0 - 1 |
-| byte | class | 8 | 0 - 255 |
-| word | class | 16 | 0 - 65,535 |
-| int | class | 32 | 0 - 4,294,967,295 |
+### Usage Example
+```typescript
+import {byte} from 'libslm-binary';
 
-### Eksamples
-
-```ts
 let first = new byte(65);
-console.info('toString: ', first.toString()); // toString: (0,1,0,0,0,0,0,1)
-console.info('valueOf: ', first.valueOf()); // valueOf: 65
-console.info('length: ', first.length) // length: 8
-console.info('index: ', first[6]) // index: 1
+console.info(first.toString());   // (0,1,0,0,0,0,0,1)
+console.info(first.valueOf());    // 65
+console.info(first.length)        // 8
+console.info(first[6])            // 1
 
 let second = new byte(255);
 second.value++;
@@ -55,46 +58,51 @@ second.value -= 5;
 
 let third = +second;
 
-console.info('first: ', stringify(first, true)); // first: 0b01000001
-console.info('second: ', hexify(second, true)); // second: 0xFF
-console.info('third: ', third); // third: 255
+console.info('first: ', stringify(first, true));  // 0b01000001
+console.info('second: ', hexify(second, true));   // 0xFF
+console.info('third: ', third);                   // 255
 ```
+
+### Notes
+These classes serve as fundamental building blocks for binary manipulation. Since this library is experimental, implementations may change as new ideas emerge.
 
 ## Guard
+This library provides a simple yet flexible implementation of guard clauses to enforce preconditions and fail fast when encountering invalid input. Instead of cluttering your functions with nested conditionals, these guard clauses help keep code clean, readable, and robust.
 
-### Types
+### Features
+- **Concise and expressive**: Reduce boilerplate validation code.
+- **Extensible**: Easily add custom guards for specific use cases.
+- **Fail-fast approach**: Stop execution immediately when invalid data is detected.
 
-#### Against
+### Available Guard Methods
+- `guard.against.null(variables, message?, options?)`
+- `guard.against.undefined(variables, message?, options?)`
+- `guard.against.empty(variables, message?, options?)`
+- `guard.against.outOfRange(variables, minimum, maximum, message?, options?)`
+- `guard.against.less(variables, minimum, message?, options?)`
+- `guard.against.bigger(variables, maximum, message?, options?)`
+- `guard.is.number(variables, message?, options?)`
+- `guard.is.string(variables, message?, options?)`
+- `guard.is.boolean(variables, message?, options?)`
+- `guard.is.object(variables, message?, options?)`
+- `guard.is.bigint(variables, message?, options?)`
+- `guard.is.symbol(variables, message?, options?)`
+- `guard.is.undefined(variables, message?, options?)`
+- `guard.is.null(variables, message?, options?)`
 
-| name | path | description |
-|:-|:-|:-|
-| null | guard.against.null | Throws if input is null. |
-| undefined | guard.against.undefined | Throws if input is undefined. |
-| empty | guard.against.empty | Throws if input is empty. |
-| outOfRange | guard.against.outOfRange | Throws if input is out of given range. |
-| less | guard.against.less | Throws if input is less then given minimum. |
-| bigger | guard.against.bigger | Throws if input is bigger then given maximum. |
+### Usage Example
+Here’s how the built-in guard clauses can be used:
+```typescript
+import {guard} from 'libslm.guard';
 
-#### Is
+function foo(value: unknown) {
+  guard.against.null({value})       // throws if value is null
+  guard.against.undefined({value})  // throws if value is undefined
+  guard.is.string({value})          // throws if value is not a string
 
-| name | path | description |
-|:-|:-|:-|
-| number | guard.is.number | Throws if input is not a number. |
-| string | guard.is.string | Throws if input is not a string. |
-| boolean | guard.is.boolean | Throws if input is not a boolean. |
-| object | guard.is.object | Throws if input is not a object. |
-| bigint | guard.is.bigint | Throws if input is not a bigint. |
-| symbol | guard.is.symbol | Throws if input is not a symbol. |
-| undefined | guard.is.undefined | Throws if input is not undefined. |
-| null | guard.is.null | Throws if input is not null. |
-
-### Eksamples
-
-```ts
-guard.against
-  .undefined({foo: undefined}) // throws TypeError -> guard.against.undefined: 'foo' is undefined.
-  .outOfRange({foo: 5}, 0, 4) // throws RangeError -> guard.against.outOfRange: 'foo' is out of range.
-  .less({foo: 5}, 10) // throws RangeError -> guard.against.less: 'foo' is less then 10.
-
-guard.is.string({foo: undefined}) // throws TypeError -> guard.is.string: 'foo' is not a string.
+  console.info(typeof value)        // string
+}
 ```
+
+### Notes
+Since this library is experimental, these implementations may change or expand over time. Use them as needed, tweak them as desired, and embrace the chaos.
